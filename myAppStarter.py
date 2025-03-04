@@ -113,66 +113,56 @@ def delFriend(): # this function controls the deletion process of a friend
             messagebox.showinfo("remove file","The intended deletion failed") #if the useer selects not to delete a file a message is shown           
 
 def addFriend(): # this function controls the addition process of a friend
-    fileType=(("Image files","*.png;*.jpg;*.jpeg"),("All files","*.*")) # this lines determines the files that the user can select, it can be either image file or any file
-    newFriend=filedialog.askopenfilename(initialdir=path,title="Choose a friend's picture to add them.",filetype=fileType)#by the help of this line a new file is opened that ask us to select the image of friend that we want to add
-    if newFriend: #to check if user has selecter a file to add a friend or not
-        check=messagebox.askquestion("Add a new file","Just confirming, you want to add someone new to your friends list?")#to confirm user selection a message is shown
-        if check=="yes": #this if function checks if user has confirmed the message 
-            (head_3,tail_3)=os.path.splitext(newFriend) #splits the file name into a head(the part before the last period) and tail part(the extension,including the period)
-            if tail_3.lower() not in [".png",".jpg",".jpeg"]:#this code checks if the selected file is an image file or not
-                messagebox.showwarning("Error","It's not an Image file")# if not a image file a warning msg is shown
+    fileType=(("Image files","*.png;*.jpg;*.jpeg"),("All files","*.*")) 
+    newFriend=filedialog.askopenfilename(initialdir=path,title="Choose a friend's picture to add them.",filetype=fileType)
+    if newFriend: 
+        check=messagebox.askquestion("Add a new file","Just confirming, you want to add someone new to your friends list?")
+        if check=="yes": 
+            (head_3,tail_3)=os.path.splitext(newFriend) 
+            if tail_3.lower() not in [".png",".jpg",".jpeg"]:
+                messagebox.showwarning("Error","It's not an Image file")
             else:
-                shutil.copy(newFriend,path) # if the file selected is an image file, it copies the selected file to the specified path i.e. where other images are stored
-                if btnClearAll.state()==("disabled",):#if btnClearAll is disabled, means other friends are also being displayed
-                    showFriends() #then this function is called to refresh the list
-                else: # if it is enabled
-                    Frame_Image.grid_remove() #Frame_Image is removed
-                    stateList.clear() #stateList is cleared 
-                    showFriends() # this function is called to refresh the list
+                shutil.copy(newFriend,path) 
+                if btnClearAll.state()==("disabled",):
+                    showFriends() 
+                else: 
+                    Frame_Image.grid_remove() 
+                    stateList.clear() 
+                    showFriends() 
         else:
-            messagebox.showinfo("Add a new file","Couldn't add the new file")#if the useer selects not to add a new file a message is shown 
+            messagebox.showinfo("Add a new file","Couldn't add the new file")
 
 def quitApp(): # a function which is made for quitting the app
-    if messagebox.askyesno("Quit","Are you sure you want to close this application?"): #it displays the message if you want to quit the appliction, if the user clicks 'yes', the condition evaluates as true 
-        myApp.destroy()  #closes the Tkinter application window by calling destroy() method on 'myApp' meaning this shuts down the application
+    if messagebox.askyesno("Quit","Are you sure you want to close this application?"): 
+        myApp.destroy() 
 
-# There will be some other functions to handle the user interactions like clearing friend'sfriends, create frames, ets
 
 #Basic Window for your app
-myApp = Tk() #this line creates a new application window and assigns it to the variable myApp,tk()a function provided by Tkinter library to crteate a new main window for the application
-myApp.title("Image display app by: Aryan Paudel") #sets the title of the window
-myApp.geometry("1200x800") #format-widthxheight # sets the initial size of the window
-myApp.configure(background='Khaki') #sets background colour
+myApp = Tk()
+myApp.title("Image display app by: Aryan Paudel") 
+myApp.geometry("1200x800") 
+myApp.configure(background='Khaki') 
 
 #code to configure styles for your ttk widget
 
-#write code below to create styles for you buttons, labels, frames, etc
-
-
-style=ttk.Style() #used for styling widgets in Tkinter
-style.theme_use('alt')# it determines the overall apperance of widgets like buttons,labels,etc, alt is one of the built in themes in Tkinter
-style.configure("TButton",fg="yellow",width=20,height=50,pady=5,font=("Times New Roman",17),borderwidth=3)# configure style for all TButton
-style.map('TButton',background=[('active','violet')])# when button is in active state background colour is red
-                                                #TButton - button widget with a theamed appearance.
-
+style=ttk.Style() 
+style.theme_use('alt')
+style.configure("TButton",fg="yellow",width=20,height=50,pady=5,font=("Times New Roman",17),borderwidth=3)
+style.map('TButton',background=[('active','violet')])
 
 #Create a frame(mainMenu) that will hold buttons to manage the app.
-buttonFrame=LabelFrame(myApp,text="App Menu",background="grey",width=1200,height=75,font=("Times New Roman",12))#creates a labeled frame widget within the myApp window.The label of the frame is set to "App Menu" with a background colour of 'cyan'.
-buttonFrame.grid(columnspan=9) # this code places the buttonFrame widget within the myApp using window grid layout manager
-                              #columnspan=9 means that the frame will span across 9 columns in the grid layout, this positions the frame at the top of the window sapnning the entire width.
+buttonFrame=LabelFrame(myApp,text="App Menu",background="grey",width=1200,height=75,font=("Times New Roman",12))
+buttonFrame.grid(columnspan=9) 
 
 
-# Create buttons that have been described in the coursework specification and add to the frame above
-
-
-# This code creates a button that lets users see their friends list. You can customize how it looks and what happens when it's clicked.
+# This creates a button that lets users see their friends list..
 btnShowFriends=ttk.Button(buttonFrame,text="showFriends",style="TButton",command=showFriends)
-btnShowFriends.grid(row=0,column=0) # to place the button in the buttonFrame at row 0, column 0
+btnShowFriends.grid(row=0,column=0) 0
 
 # These lines of code instruct the program to build a button. Clicking this button (which is currently disabled and cannot be clicked) would remove all your friends from the list. You can also change how the button looks.
 btnClearAll=ttk.Button(buttonFrame,text="Clear All",style="TButton", command=clearAll)
 btnClearAll['state']='disabled'
-btnClearAll.grid(row=0,column=1)# to place the button in the buttonFrame at row 0, column 1
+btnClearAll.grid(row=0,column=1)
 
 #Define a button for deleting a friend, set its text and style, and bind it to the delFriend function
 btnDeleteFriend=ttk.Button(buttonFrame, text="Delete Friend",style="TButton", command=delFriend)
